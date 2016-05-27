@@ -1,6 +1,6 @@
 # Ara
 
-**TODO: Add description**
+**Getting the taste of elixir**
 
 ## Installation
 
@@ -17,4 +17,3 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:ara]]
         end
-
