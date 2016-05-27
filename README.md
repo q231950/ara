@@ -2,6 +2,8 @@
 
 **Getting the taste of elixir**
 
+![Screenshot](Screen Shot 2016-05-27 at 22.59.25.png)
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
