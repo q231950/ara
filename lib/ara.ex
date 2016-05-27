@@ -6,12 +6,10 @@ defmodule Ara do
   end
 
   def open_pull_requests do
-    header = ["#", "Title"]
-
+    header = ["#", "Title", "User"]
     PullRequests.GitHubPullRequests.fetch("elixir-lang", "elixir")
-    |> Enum.map( fn x -> [x["number"], x["title"]] end )
+    |> Enum.map( fn x -> [ x["number"], x["title"], x["user"]["login"] ] end )
     |> TableRex.quick_render!(header)
     |> IO.puts
-
   end
 end
