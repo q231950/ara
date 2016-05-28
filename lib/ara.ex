@@ -36,9 +36,10 @@ defmodule Ara do
   end
 
   def open_pull_requests do
-    header = ["#", "Title", "User", "Assignee"]
+    header = ["#", "Title", "Author"]
     PullRequests.GitHubPullRequests.fetch("q231950", "ara")
-    |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login, assignee_login(pr.assignee) ] end )
+    |> Enum.filter( fn pr -> assignee_login(pr.assignee) == "q231950" end )
+    |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
     |> TableRex.quick_render!(header)
     |> IO.puts
   end
