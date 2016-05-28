@@ -14,7 +14,7 @@ defmodule Ara.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison, :issues, :pull_requests, :table_rex]]
+    [applications: [:logger, :httpoison, :issues, :table_rex]]
   end
 
   # Dependencies can be Hex packages:
@@ -31,7 +31,6 @@ defmodule Ara.Mixfile do
       { :httpoison, "~> 0.8" },
       { :poison, "~> 2.0" },
       { :issues, path: "../issues" },
-      { :pull_requests, path: "../pull_requests" },
       { :table_rex, "~> 0.8.0" }
     ]
   end
