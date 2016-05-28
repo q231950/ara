@@ -7,21 +7,24 @@ defmodule Ara do
   end
 
   def parse_args(argv) do
-    parse = OptionParser.parse( argv, switches: [ help: :boolean , pullrequests: :boolean],
+    OptionParser.parse( argv, switches: [ help: :boolean , pullrequests: :boolean],
                                        aliases: [ h: :help , pr: :pullrequests])
+    |> parse_options
+  end
 
-     case parse do
-        { [ help: true ], _, _ }
-          -> :help
+  defp parse_options(options) do
+    case options do
+       { [ help: true ], _, _ }
+         -> :help
 
-        { [pullrequests: true ], _, _ }
-          -> :pullrequests
+       { [pullrequests: true ], _, _ }
+         -> :pullrequests
 
-          { _, ["pr"], _ }
-            -> :pullrequests
+         { _, ["pr"], _ }
+           -> :pullrequests
 
-         _ -> :help
-     end
+        _ -> :help
+    end
   end
 
   defp process( :help ) do
