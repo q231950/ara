@@ -2,8 +2,9 @@ defmodule PullRequests.GitHubPullRequests do
 
   require Logger
 
-  @github_url "https://api.github.com"
   @user_agent [ {"User-Agent" , "Kimochka"} ]
+  @api_access_token Application.get_env(:ara, :api_access_token)
+  @github_api_base_url Application.get_env(:ara, :api_base_url)
 
   def fetch(owner, repository) do
     Logger.info "Fetching pull requests for owner #{owner} of #{repository}"
@@ -13,7 +14,7 @@ defmodule PullRequests.GitHubPullRequests do
   end
 
   defp url(owner, repository) do
-    "#{@github_url}/repos/#{owner}/#{repository}/pulls"
+    "#{ @github_api_base_url }/repos/#{owner}/#{repository}/pulls"
   end
 
   defp handleResponse ( { :ok, response }) do
