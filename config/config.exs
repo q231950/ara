@@ -2,10 +2,6 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :ara,
-  api_access_token: System.get_env( "ARA_GITHUB_API_ACCESS_TOKEN" ),
-  api_base_url: System.get_env( "ARA_GITHUB_API_BASE_URL")
-
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
