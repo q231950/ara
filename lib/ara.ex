@@ -30,13 +30,19 @@ defmodule Ara do
   end
 
   defp process( { :pr, owner, repository} ) do
-    open_pull_requests( owner, repository )
+    fetch_user
+    |> open_pull_requests( owner, repository )
   end
 
-  def open_pull_requests( owner, repository ) do
+  def fetch_user do
+    Ara.GitHubUser.fetch
+    |> IO.inspect
+  end
+
+  def open_pull_requests( user, owner, repository ) do
     header = ["#", "Title", "Author"]
     PullRequests.GitHubPullRequests.fetch( owner, repository )
-    |> Enum.filter( fn pr -> assignee_login(pr.assignee) == "q231950" end )
+    |> Enum.filter( fn pr -> assignee_login(pr.assignee) == user.login end )
     |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
     |> TableRex.quick_render!(header)
     |> IO.puts
