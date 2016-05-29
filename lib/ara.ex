@@ -53,7 +53,7 @@ defmodule Ara do
     |> TableRex.quick_render!(header)
     |> IO.puts
   end
-  
+
   defp render_pull_requests(_) do
   end
 
@@ -62,14 +62,21 @@ defmodule Ara do
     case String.strip(answer) do
       "" -> IO.puts ("bye")
       "q" -> IO.puts ("bye")
-      number -> checkout_pull_request(number, pull_requests)
+      number -> checkout_pull_request_with_number(number, pull_requests)
     end
   end
 
-  defp checkout_pull_request(number, pull_requests) do
+  defp checkout_pull_request_with_number(number, pull_requests) do
     pull_requests
     |> Enum.filter( fn pr -> to_string(pr.number) == number end)
-    |> IO.inspect
+    |> Enum.at(0)
+    |> checkout_pull_request
+  end
+
+  defp checkout_pull_request(pull_request) do
+    branch = pull_request.head.ref
+    url = pull_request.head.repo.ssh_url
+    IO.puts ~s(git clone -b #{branch} #{url})
   end
 
   defp checkout(pull_request, number) do

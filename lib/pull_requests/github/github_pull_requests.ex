@@ -20,7 +20,8 @@ defmodule PullRequests.GitHubPullRequests do
   defp handleResponse ( { :ok, response }) do
     Logger.info "Successfully received response"
     response.body
-    |> Poison.decode!(as: [ %Ara.PullRequest{ user: %Ara.User{}, assignee: %Ara.User{} } ] )
+    # |> IO.inspect
+    |> Poison.decode!(as: [ %Ara.PullRequest{ user: %Ara.User{}, assignee: %Ara.User{}, head: %Ara.Head{ repo: %Ara.Repository{} } } ] )
   end
 
   defp handleResponse ( {status, response} ) do
