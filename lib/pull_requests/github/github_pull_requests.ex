@@ -12,7 +12,6 @@ defmodule PullRequests.GitHubPullRequests do
   end
 
   defp url(owner, repository) do
-    IO.puts "token:"
     github_api_base_url = System.get_env( "ARA_GITHUB_API_BASE_URL")
     IO.puts github_api_base_url
     "#{ github_api_base_url }/repos/#{owner}/#{repository}/pulls"
@@ -21,7 +20,8 @@ defmodule PullRequests.GitHubPullRequests do
   defp handleResponse ( { :ok, response }) do
     Logger.info "Successfully received response"
     response.body
-    |> Poison.decode!(as: [ %Ara.PullRequest{ user: %Ara.User{}, assignee: %Ara.User{} } ] )
+    # |> IO.inspect
+    |> Poison.decode!(as: [ %Ara.PullRequest{ user: %Ara.User{}, assignee: %Ara.User{}, head: %Ara.Head{ repo: %Ara.Repository{} } } ] )
   end
 
   defp handleResponse ( {status, response} ) do
