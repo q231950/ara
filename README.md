@@ -6,7 +6,7 @@
 
 ## Setup GitHub API Access Token and URL
 
-In your _~/.profile_ or _~/.bash_profile_
+In your _~/.profile_ or _~/.bash_profile_ add the [access token you have generated](https://github.com/settings/tokens) for your GitHub account. The access token doesn't need any rights other than the default public ones.
 
 ```bash
 export ARA_GITHUB_API_ACCESS_TOKEN="xxx"
