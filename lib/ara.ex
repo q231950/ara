@@ -7,37 +7,35 @@ defmodule Ara do
   end
 
   def parse_args(argv) do
-    OptionParser.parse( argv, switches: [ help: :boolean , pullrequests: :boolean],
-                                       aliases: [ h: :help , pr: :pullrequests])
+    OptionParser.parse( argv, switches: [ help: :boolean , pr: :boolean],
+                                       aliases: [ h: :help])
     |> parse_options
   end
 
   defp parse_options(options) do
+    IO.inspect options
     case options do
        { [ help: true ], _, _ }
          -> :help
 
-       { [pullrequests: true ], _, _ }
-         -> :pullrequests
-
-         { _, ["pr"], _ }
-           -> :pullrequests
+       { _, [repository], [{"-pr", owner}] }
+         -> { :pr, owner, repository}
 
         _ -> :help
     end
   end
 
   defp process( :help ) do
-    IO.puts "Usage: ara [-pr | -h]"
+    IO.puts "Usage: ara -pr <owner> <repository>"
   end
 
-  defp process( :pullrequests ) do
-    open_pull_requests
+  defp process( { :pr, owner, repository} ) do
+    open_pull_requests( owner, repository )
   end
 
-  def open_pull_requests do
+  def open_pull_requests( owner, repository ) do
     header = ["#", "Title", "Author"]
-    PullRequests.GitHubPullRequests.fetch("q231950", "ara")
+    PullRequests.GitHubPullRequests.fetch( owner, repository )
     |> Enum.filter( fn pr -> assignee_login(pr.assignee) == "q231950" end )
     |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
     |> TableRex.quick_render!(header)
