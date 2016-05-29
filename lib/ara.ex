@@ -7,40 +7,52 @@ defmodule Ara do
   end
 
   def parse_args(argv) do
-    OptionParser.parse( argv, switches: [ help: :boolean , pullrequests: :boolean],
-                                       aliases: [ h: :help , pr: :pullrequests])
+    OptionParser.parse( argv, switches: [ help: :boolean , pr: :boolean],
+                                       aliases: [ h: :help])
     |> parse_options
   end
 
   defp parse_options(options) do
+    IO.inspect options
     case options do
        { [ help: true ], _, _ }
          -> :help
 
-       { [pullrequests: true ], _, _ }
-         -> :pullrequests
-
-         { _, ["pr"], _ }
-           -> :pullrequests
+       { _, [repository], [{"-pr", owner}] }
+         -> { :pr, owner, repository}
 
         _ -> :help
     end
   end
 
   defp process( :help ) do
-    IO.puts "Usage: ara [-pr | -h]"
+    IO.puts "Usage: ara -pr <owner> <repository>"
   end
 
-  defp process( :pullrequests ) do
-    open_pull_requests
+  defp process( { :pr, owner, repository} ) do
+    fetch_user
+    |> open_pull_requests( owner, repository )
   end
 
-  def open_pull_requests do
-    header = ["#", "Title", "User"]
-    PullRequests.GitHubPullRequests.fetch("elixir-lang", "elixir")
+  def fetch_user do
+    Ara.GitHubUser.fetch
+    |> IO.inspect
+  end
+
+  def open_pull_requests( user, owner, repository ) do
+    header = ["#", "Title", "Author"]
+    PullRequests.GitHubPullRequests.fetch( owner, repository )
+    |> Enum.filter( fn pr -> assignee_login(pr.assignee) == user.login end )
     |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
     |> TableRex.quick_render!(header)
     |> IO.puts
+  end
+
+  defp assignee_login(assignee) do
+    case assignee do
+      a when is_nil(a) -> "None"
+      _ -> assignee.login
+    end
   end
 
 end
