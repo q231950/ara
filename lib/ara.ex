@@ -32,7 +32,6 @@ defmodule Ara do
   def process( { :pr, owner, repository} ) do
     fetch_user
     |> open_pull_requests( owner, repository )
-
   end
 
   defp fetch_user do
@@ -40,9 +39,11 @@ defmodule Ara do
   end
 
   defp open_pull_requests( user, owner, repository ) do
-    PullRequests.GitHubPullRequests.fetch( owner, repository )
+    pull_requests = PullRequests.GitHubPullRequests.fetch( owner, repository )
     |> Enum.filter( fn pr -> assignee_login(pr.assignee) == user.login end )
-    |> render_pull_requests
+
+    render_pull_requests( pull_requests )
+    request_action_for_pull_requests( pull_requests )
   end
 
   defp render_pull_requests(pull_requests) when length(pull_requests) > 0 do
@@ -51,25 +52,28 @@ defmodule Ara do
     |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
     |> TableRex.quick_render!(header)
     |> IO.puts
-
-    request_action_for_pull_requests( pull_requests )
   end
-
+  
   defp render_pull_requests(_) do
   end
 
   defp request_action_for_pull_requests ( pull_requests ) do
-    answer = IO.gets "Checkout a pr? Choose a number to checkout, press q to exit"
-    case answer do
-      "q\n" -> IO.puts ("bye")
-      number -> checkout("repository", "branch")
+    answer = IO.gets "Checkout a pr? Choose a number to checkout, press q to exit: "
+    case String.strip(answer) do
+      "" -> IO.puts ("bye")
+      "q" -> IO.puts ("bye")
+      number -> checkout_pull_request(number, pull_requests)
     end
-    # Enum.map(pull_requests, fn pr -> pr.number end )
-    # |> IO.inspect
   end
 
-  defp checkout(repository, branch) do
-    IO.puts "Checkout some branch and repository"
+  defp checkout_pull_request(number, pull_requests) do
+    pull_requests
+    |> Enum.filter( fn pr -> to_string(pr.number) == number end)
+    |> IO.inspect
+  end
+
+  defp checkout(pull_request, number) do
+    IO.inspect pull_request
   end
 
   defp assignee_login(assignee) do
