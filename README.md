@@ -27,6 +27,10 @@ Depending on your repo it renders something like this if you're assigned to a pu
 +---+------------------------------------+---------+
 ```
 
+## Build executable
+
+`mix escript.build`
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:

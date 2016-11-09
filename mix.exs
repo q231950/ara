@@ -4,7 +4,7 @@ defmodule Ara.Mixfile do
   def project do
     [app: :ara,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      escript: [main_module: Ara],
@@ -17,9 +17,9 @@ defmodule Ara.Mixfile do
 
   defp deps do
     [
-      { :httpoison, "~> 0.8" },
-      { :poison, "~> 2.0" },
-      { :table_rex, "~> 0.8.0" }
+      { :httpoison, "~> 0.10" },
+      { :poison, "~> 3.0" },
+      { :table_rex, "~> 0.8.3" }
     ]
   end
 end
