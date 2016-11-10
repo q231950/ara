@@ -3,33 +3,36 @@ defmodule Ara do
   def main(argv) do
     argv
     |> parse_args
+    |> parse_options
     |> process
   end
 
   def parse_args(argv) do
-    OptionParser.parse( argv, switches: [ help: :boolean , pr: :boolean],
+    options = OptionParser.parse( argv, switches: [ help: :boolean , pr: :boolean],
                                        aliases: [ h: :help])
-    |> parse_options
   end
 
   defp parse_options(options) do
-    IO.inspect options
     case options do
-       { [ help: true ], _, _ }
-         -> :help
+      { params, ["pr"], _ }
+        -> { :pr, params}
 
-       { _, [repository], [{"-pr", owner}] }
-         -> { :pr, owner, repository}
+      { _, [repository], [{"-pr", owner}] }
+        -> { :pr, [{:owner, owner}, {:repo, repository}] }
 
         _ -> :help
     end
   end
 
   defp process( :help ) do
-    IO.puts "Usage: ara -pr <owner> <repository>"
+    IO.puts "#{IO.ANSI.magenta() }🐥 ara, a small application to give you a brief overview over your pull requests.#{IO.ANSI.default_color()}\n\n"
+    IO.puts "\tUsage: ara -pr <owner> <repository>"
   end
 
-  defp process( { :pr, owner, repository} ) do
+  defp process( { :pr, params} ) do
+    owner = params[:owner]
+    repository = params[:repo]
+
     fetch_user
     |> open_pull_requests( owner, repository )
   end

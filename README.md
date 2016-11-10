@@ -16,7 +16,7 @@ Then update your environment variables by `source ~/.bash_profile`
 
 ## Run
 
-`macbook:ara kim$ ./ara -pr q231950 ara` will load the pull requests of owner `q231950` and repository `ara` where the assignee equals the user whose access token is setup as `ARA_GITHUB_API_ACCESS_TOKEN`.
+`macbook:ara kim$ ./ara pr --owner q231950 --repo ara` will load the pull requests of owner `q231950` and repository `ara` where the assignee equals the user whose access token is setup as `ARA_GITHUB_API_ACCESS_TOKEN`.
 Depending on your repo it renders something like this if you're assigned to a pull requests of the given repo.
 
 ```
