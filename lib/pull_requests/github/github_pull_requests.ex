@@ -12,9 +12,8 @@ defmodule PullRequests.GitHubPullRequests do
   end
 
   defp url(owner, repository) do
-    IO.puts "token:"
     github_api_base_url = System.get_env( "ARA_GITHUB_API_BASE_URL")
-    IO.puts github_api_base_url
+    IO.puts "#{ github_api_base_url }/repos/#{owner}/#{repository}/pulls"
     "#{ github_api_base_url }/repos/#{owner}/#{repository}/pulls"
   end
 

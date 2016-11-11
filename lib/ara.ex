@@ -52,7 +52,6 @@ defmodule Ara do
 
   def fetch_user do
     Ara.GitHubUser.fetch
-    |> IO.inspect
   end
 
   def open_pull_requests( user, owner, repository ) do
