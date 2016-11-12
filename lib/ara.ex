@@ -1,12 +1,7 @@
 defmodule Ara do
-
   require Logger
-  require Ara.AraParameterError, as: AraParameterError
 
-
-  def run(args) do
-    IO.inspect args
-  end
+  alias Ara.{AraParameterError, PullRequests, GitHubUser}
 
   def main(argv) do
     argv
@@ -16,7 +11,7 @@ defmodule Ara do
   end
 
   def parse_args(argv) do
-    options = OptionParser.parse( argv, switches: [ help: :boolean,
+    OptionParser.parse( argv, switches: [ help: :boolean,
       pr: :string,
       user: :string,
       repository: :string],
@@ -65,28 +60,7 @@ defmodule Ara do
     owner = params[:user]
     repository = params[:repository]
 
-    fetch_user
-    |> open_pull_requests( owner, repository )
+    GitHubUser.fetch
+    |> PullRequests.open_pull_requests( owner, repository )
   end
-
-  def fetch_user do
-    Ara.GitHubUser.fetch
-  end
-
-  def open_pull_requests( user, owner, repository ) do
-    header = ["#", "Title", "Author"]
-    PullRequests.GitHubPullRequests.fetch( owner, repository )
-    |> Enum.filter( fn pr -> assignee_login(pr.assignee) == user.login end )
-    |> Enum.map( fn pr -> [ pr.number, pr.title, pr.user.login ] end )
-    |> TableRex.quick_render!(header)
-    |> IO.puts
-  end
-
-  defp assignee_login(assignee) do
-    case assignee do
-      a when is_nil(a) -> "None"
-      _ -> assignee.login
-    end
-  end
-
 end
