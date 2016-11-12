@@ -41,13 +41,14 @@ defmodule Ara do
   defp error_message_missing_parameter( user_repo_map ) do
     case user_repo_map do
       { user, repo } when is_nil(user) and is_nil(repo)
-      -> {:error, "#{ IO.ANSI.red() }The user and repository name parameters -u <user> -r <repository name> are missing.#{IO.ANSI.default_color()}"}
+      -> {:error, "The user and repository name parameters -u <user> -r <repository name> are missing.#{IO.ANSI.default_color()}"}
       { user, _ } when is_nil( user )
-      -> {:error, "#{ IO.ANSI.red() }The user parameter -u <user> is missing.#{IO.ANSI.default_color()}"}
+      -> {:error, "The user parameter -u <user> is missing."}
       { _, repo } when is_nil( repo )
-      -> {:error, "#{ IO.ANSI.red() }The repository parameter -r <repository name> is missing.#{IO.ANSI.default_color()}"}
+      -> {:error, "The repository parameter -r <repository name> is missing."}
     end
   end
+
   defp process( :help ) do
     IO.puts "#{IO.ANSI.magenta() }
     \tara, a small application to give you a brief overview over your pull requests.#{IO.ANSI.default_color()}\n\n"
@@ -55,7 +56,11 @@ defmodule Ara do
   end
 
   defp process( { :error, msg } ) do
-    Logger.error(msg)
+    Logger.error( colour_red( msg ) )
+  end
+
+  defp colour_red(text) do
+    "#{ IO.ANSI.red() }#{text}#{ IO.ANSI.default_color() }"
   end
 
   defp process( { :pr, params} ) do
