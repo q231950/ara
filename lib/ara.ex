@@ -1,6 +1,8 @@
 defmodule Ara do
 
   require Logger
+  require Ara.AraParameterError, as: AraParameterError
+
 
   def run(args) do
     IO.inspect args
@@ -41,7 +43,7 @@ defmodule Ara do
   defp error_message_missing_parameter( user_repo_map ) do
     case user_repo_map do
       { user, repo } when is_nil(user) and is_nil(repo)
-      -> {:error, "The user and repository name parameters -u <user> -r <repository name> are missing.#{IO.ANSI.default_color()}"}
+      -> {:error, "The user and repository name parameters -u <user> -r <repository name> are missing."}
       { user, _ } when is_nil( user )
       -> {:error, "The user parameter -u <user> is missing."}
       { _, repo } when is_nil( repo )
@@ -56,11 +58,7 @@ defmodule Ara do
   end
 
   defp process( { :error, msg } ) do
-    Logger.error( colour_red( msg ) )
-  end
-
-  defp colour_red(text) do
-    "#{ IO.ANSI.red() }#{text}#{ IO.ANSI.default_color() }"
+    raise AraParameterError, message: msg
   end
 
   defp process( { :pr, params} ) do
