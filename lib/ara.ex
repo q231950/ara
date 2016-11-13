@@ -1,7 +1,7 @@
 defmodule Ara do
   require Logger
 
-  alias Ara.{AraParameterError, PullRequests, GitHubUser}
+  alias Ara.{ParameterError, InconsistencyError, PullRequests, GitHubUser}
 
   def main(argv) do
     argv
@@ -12,30 +12,39 @@ defmodule Ara do
 
   def parse_args(argv) do
     OptionParser.parse( argv, switches: [ help: :boolean,
-      pr: :string,
+      pullrequest: :boolean,
+      webhook: :string,
       user: :string,
       repository: :string],
     aliases: [ h: :help,
       p: :pr,
       u: :user,
-      r: :repository])
+      r: :repository,
+      wh: :webhook,
+      pr: :pullrequest])
   end
 
-  defp parse_options(options) do
+  def parse_options(options) do
     case options do
-      { params, ["pr"], _ }
-      ->
-        if is_nil(params[:user]) or is_nil(params[:repository]) do
-          error_message_missing_parameter( { params[:user], params[:repository] } )
-        else
-          { :pr, params}
-        end
-
+      { params, _, _ }
+      -> if params[:pullrequest] == true do
+          parse_pull_request_params(params)
+         else
+          :help
+         end
         _ -> :help
     end
   end
 
-  defp error_message_missing_parameter( user_repo_map ) do
+  defp parse_pull_request_params(params) do
+    if is_nil(params[:user]) or is_nil(params[:repository]) do
+      error_message_missing_parameter( { params[:user], params[:repository] } )
+    else
+      { :pr, [{:user, params[:user]}, {:repository, params[:repository]}]}
+    end
+  end
+
+  def error_message_missing_parameter( user_repo_map ) do
     case user_repo_map do
       { user, repo } when is_nil(user) and is_nil(repo)
       -> {:error, "The user and repository name parameters -u <user> -r <repository name> are missing."}
@@ -43,6 +52,7 @@ defmodule Ara do
       -> {:error, "The user parameter -u <user> is missing."}
       { _, repo } when is_nil( repo )
       -> {:error, "The repository parameter -r <repository name> is missing."}
+      _ -> raise InconsistencyError, message: "Trying to generate an error reason for a valid user+repo map"
     end
   end
 
@@ -53,7 +63,7 @@ defmodule Ara do
   end
 
   defp process( { :error, msg } ) do
-    raise AraParameterError, message: msg
+    raise ParameterError, message: msg
   end
 
   defp process( { :pr, params} ) do
@@ -63,4 +73,6 @@ defmodule Ara do
     GitHubUser.fetch
     |> PullRequests.open_pull_requests( owner, repository )
   end
+
+
 end
