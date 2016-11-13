@@ -13,7 +13,7 @@ defmodule Ara do
   def parse_args(argv) do
     OptionParser.parse( argv, switches: [ help: :boolean,
       pullrequest: :boolean,
-      webhook: :string,
+      webhook: :boolean,
       user: :string,
       repository: :string],
     aliases: [ h: :help,
