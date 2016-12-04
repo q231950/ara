@@ -16,7 +16,6 @@ defmodule Ara.OptionParser do
       r: :repository,
       wh: :webhook,
       pr: :pullrequest])
-      |> parse_options
   end
 
   def parse_options(options) do

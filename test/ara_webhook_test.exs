@@ -3,16 +3,16 @@ defmodule AraWebhookTest do
   doctest Ara
 
   test "webhook command is correctly parsed from argv" do
-    assert { [ {:webhook, true} ], [], [] } == Ara.parse_args([ "--webhook" ])
+    assert { [ {:webhook, true} ], [], [] } == Ara.OptionParser.parse_args([ "--webhook" ])
   end
 
   test "wh shorthand command is correctly parsed from argv" do
-    assert { [{:webhook, true}], [], [] } == Ara.parse_args([ "-wh" ])
+    assert { [{:webhook, true}], [], [] } == Ara.OptionParser.parse_args([ "-wh" ])
   end
 
-  test "wh shorthand command is correctly parsed from options" do
-    options = { [wh: true, owner: "foo", repository: "bar"], [], [] }
+  test "webhook command is correctly parsed from options" do
+    options = { [webhook: true, owner: "foo", repository: "bar"], [], [] }
     expected = {:ok, [%Ara.WebhookCommand{kind: :webhook, owner: "foo", repository: "bar" }]}
-    assert expected == Ara.parse_options( options )
+    assert expected == Ara.OptionParser.parse_options(options)
   end
 end
