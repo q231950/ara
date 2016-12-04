@@ -2,6 +2,12 @@ defmodule Ara.OptionParser do
 
   alias Ara.{CommandParser}
 
+  def parse_args_to_options(argv) do
+    argv
+    |> parse_args
+    |> parse_options
+  end
+
   def parse_args(argv) do
     OptionParser.parse( argv, switches: [ help: :boolean,
       pullrequest: :boolean,

@@ -5,8 +5,7 @@ defmodule Ara do
 
   def main(argv) do
     argv
-    |> Ara.OptionParser.parse_args
-    |> Ara.OptionParser.parse_options
+    |> Ara.OptionParser.parse_args_to_options
     |> process
   end
 
