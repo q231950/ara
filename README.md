@@ -2,7 +2,7 @@
 
 **Getting the taste of elixir**
 
-![Screenshot](Screen Shot 2016-05-27 at 22.59.25.png)
+![Screenshot](screenshot.png)
 
 ## Setup GitHub API Access Token and URL
 
