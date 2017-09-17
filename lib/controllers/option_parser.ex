@@ -9,24 +9,24 @@ defmodule Ara.OptionParser do
   end
 
   def parse_args(argv) do
-    OptionParser.parse( argv, switches: [ help: :boolean,
+    OptionParser.parse!( argv, switches: [ help: :boolean,
       pullrequest: :boolean,
       webhook: :boolean,
       user: :string,
       owner: :string,
       repository: :string],
     aliases: [ h: :help,
-      p: :pr,
+      p: :pullrequest,
       u: :user,
       o: :owner,
       r: :repository,
-      wh: :webhook,
-      pr: :pullrequest])
+      w: :webhook])
   end
 
   def parse_options(options) do
+    IO.puts("Parse options.")
     parsed = case options do
-      { params, _, _ }  -> CommandParser.commandsFromParams(params)
+      { params, _ }  -> CommandParser.commandsFromParams(params)
       _                 -> {:ok, :help}
     end
     parsed

@@ -8,7 +8,7 @@ defmodule Ara.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      escript: [main_module: Ara],
-     deps: deps]
+     deps: deps()]
   end
 
   def application do

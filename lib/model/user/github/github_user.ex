@@ -7,7 +7,7 @@ defmodule Ara.GitHubUser do
   def fetch do
     api_access_token = System.get_env( "ARA_GITHUB_API_ACCESS_TOKEN")
     Logger.info "Fetching user for access token #{ api_access_token }"
-    url
+    url()
     |> HTTPoison.get(@user_agent, params: %{ access_token: api_access_token })
     |> handleResponse
   end

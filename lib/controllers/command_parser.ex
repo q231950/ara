@@ -14,13 +14,14 @@ defmodule Ara.CommandParser do
   defp put_help_when_no_commands(commands) do
     count = Enum.count(commands)
     commands = case count do
-      0 -> Enum.concat(commands, [{:ok, :help}])
+      0 -> :help
       _ -> commands
     end
     commands
   end
 
   defp parse_webhook_params(commands, [{:webhook, true}, {:owner, owner}, {:repository, repository}]) do
+      IO.puts("parse_webhook_params.")
       command = %WebhookCommand{kind: :webhook, owner: owner, repository: repository}
       Enum.concat(commands, [command])
   end
