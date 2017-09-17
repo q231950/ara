@@ -10,9 +10,18 @@ defmodule Ara do
   end
 
   defp process( {:ok, :help} ) do
-    IO.puts "#{IO.ANSI.magenta() }
-    \tara, a small application to give you a brief overview over your pull requests.#{IO.ANSI.default_color()}\n\n"
-    IO.puts "\tUsage:\t./ara --pullrequest --user <user> --repository <repository>\n\n\tTry:\t./ara -p -u q231950 -r ara\n"
+    IO.puts "ara, a small application to give you a brief overview over your GitHub repositories.}"
+
+    IO.puts "\n\n"
+
+    IO.puts "Display assigned pull requests:\n\n\t#{IO.ANSI.green() }./ara -p -u q231950 -r ara#{IO.ANSI.default_color()}\n
+    or\n
+    \t#{IO.ANSI.green() }./ara --pullrequest --user=<user> --repository=<repository>#{IO.ANSI.default_color()}"
+
+    IO.puts "\n\n"
+    IO.puts "Display webhooks:\n\n\t#{IO.ANSI.green() }./ara -w -o q231950 -r ara#{IO.ANSI.default_color()}\n
+    or\n
+    \t#{IO.ANSI.green() }./ara --webhooks --owner=<owner> --repository=<repository>#{IO.ANSI.default_color()}"
   end
 
   defp process( { :error, msg } ) do
